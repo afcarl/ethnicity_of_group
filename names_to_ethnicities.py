@@ -60,28 +60,43 @@ def normalize_linked_in(
         data_path='test_data/linkedin_connections_export_microsoft_outlook.csv'):
     raw_df = pd.read_csv(data_path)
 
-    # raw_df['full_name'] = raw_df['First Name'] + ' ' + raw_df['Last Name']
     raw_df['full_name'] = raw_df['First Name'] + ' ' + raw_df['Last Name']
     raw_df = raw_df[['full_name']]
     raw_df.to_csv('test_data/linked_in_normalized.txt', index=False)
 
 
-def main():
-    # normalize_linked_in('test_data/msan.csv')
-    normalize_linked_in()
+def sum_ethnicity_from_file(file_path):
 
     # Create normalized ethnicity lookup DataFrame
     ethnicity_df = create_ethnicity_df()
 
     # Create DataFrame containing last names
-    names_df = create_names_df('test_data/linked_in_normalized.txt')
+    names_df = create_names_df(file_path)
 
     combined_df = pd.merge(names_df, ethnicity_df, how='left', on='last')
 
-    print combined_df.mean().reset_index().as_matrix()
+    print combined_df.mean().reset_index()
+    return combined_df.mean()
+
+def sum_ethnicity_from_df(names_df, lastname_column='last'):
+    # Create normalized ethnicity lookup DataFrame
+    ethnicity_df = create_ethnicity_df()
+
+    names_df['last'] = names_df[lastname_column].apply(lambda x: x.upper())
+    names_df = names_df[[lastname_column]]
 
 
+    combined_df = pd.merge(names_df, ethnicity_df, how='left', on='last')
+
+
+    print combined_df.mean().reset_index()
+    return combined_df.mean()
+
+def main():
+    pass
 if __name__ == '__main__':
-    main()
+
+    names = pd.read_csv('test_data/msan.csv')
+    sum_ethnicity_from_df(names)
 
 
