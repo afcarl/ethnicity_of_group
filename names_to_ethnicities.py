@@ -2,6 +2,7 @@
 """
 coding=utf-8
 """
+import argparse
 
 import pandas as pd
 import nameparser
@@ -73,30 +74,45 @@ def sum_ethnicity_from_file(file_path):
     # Create DataFrame containing last names
     names_df = create_names_df(file_path)
 
+    # Merge
     combined_df = pd.merge(names_df, ethnicity_df, how='left', on='last')
 
-    print combined_df.mean().reset_index()
+    # Output
     return combined_df.mean()
 
 def sum_ethnicity_from_df(names_df, lastname_column='last'):
     # Create normalized ethnicity lookup DataFrame
     ethnicity_df = create_ethnicity_df()
 
+    # Normalize DataFrame containing last names
     names_df['last'] = names_df[lastname_column].apply(lambda x: x.upper())
     names_df = names_df[[lastname_column]]
 
-
+    # Merge
     combined_df = pd.merge(names_df, ethnicity_df, how='left', on='last')
 
-
-    print combined_df.mean().reset_index()
+    # Output
     return combined_df.mean()
 
-def main():
-    pass
-if __name__ == '__main__':
 
-    names = pd.read_csv('test_data/msan.csv')
-    sum_ethnicity_from_df(names)
+def main():
+    parser = argparse.ArgumentParser(description='Script to empirially '
+                                               'deterime ethnic makeup of a '
+                                               'group of names')
+
+    parser.add_argument('--data_path',
+                        help='Path to a file, containing one name per line.',
+                        type=str, required=True)
+
+    args = parser.parse_args()
+
+    print sum_ethnicity_from_file(args.data_path)
+
+
+
+
+
+if __name__ == '__main__':
+    main()
 
 
