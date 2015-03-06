@@ -16,15 +16,14 @@ or change ```test_data/test_names.txt``` to ```any/path/youd/like```
 
 This will output the results, in a form like: 
 
-|white|45.782
-|black|7.716
-|asian_pac_islander|38.510
-|american indian|0.212
-|two+|1.866
-|hispanic|5.728
+
+white                 45.782
+black                  7.716
+asian_pac_islander    38.510
+american indian        0.212
+two+                   1.866
+hispanic               5.728
 dtype: float64
-
-
 
 
 ###File / Pandas DataFrame
