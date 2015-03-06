@@ -1,1 +1,2 @@
 pandas >= 15.1
+nameparser >=0.3.3

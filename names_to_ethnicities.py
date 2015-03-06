@@ -10,6 +10,17 @@ import nameparser
 
 
 def create_ethnicity_df(data_path='data/app_c.csv'):
+    """
+    Create a DataFrame containing ethnicity data (pulled from
+    http://www.census.gov/topics/population/genealogy/data/2000_surnames.html)
+
+    It is somewhat normalized, and unnecessary columns are dropped.
+
+    :param data_path: path the csv file.
+    :type data_path: str
+    :return: DataFrame containing file
+    :rtype: pd.DataFrame
+    """
     # Read in from file, with name as index
     raw_names_df = pd.read_csv(data_path, index_col=0)
 
@@ -38,6 +49,14 @@ def create_ethnicity_df(data_path='data/app_c.csv'):
 
 
 def create_names_df(data_path='test_data/test_names.txt'):
+    """
+    Create a DataFrame from the provided data path. Each line in the file
+    should be a single name
+    :param data_path: Path to data
+    :type data_path: str
+    :return: DataFrame, containing names, and column 'last'
+    :rtype: pd.DataFrame
+    """
     names_list = list()
 
     # Iterate through file, add parsed names to list
@@ -56,6 +75,14 @@ def create_names_df(data_path='test_data/test_names.txt'):
 
 def normalize_linked_in(
         data_path='test_data/linkedin_connections_export_microsoft_outlook.csv'):
+    """
+    Helper, for pulling data from LinkedIn (currently available at
+    https://www.linkedin.com/people/export-settings)
+    :param data_path: Path to data
+    :type data_path: str
+    :return: Normalized DataFrame
+    :rtype: str
+    """
     raw_df = pd.read_csv(data_path)
 
     raw_df['full_name'] = raw_df['First Name'] + ' ' + raw_df['Last Name']
@@ -64,6 +91,14 @@ def normalize_linked_in(
 
 
 def sum_ethnicity_from_file(file_path):
+    """
+    Pulls in the file (containing one name per line), normalizes it,
+    and outputs a DataFrame containing race information.
+    :param file_path: Path to file you'd like to parse.
+    :type file_path: str
+    :return: DataFrame, containing ethnicity information
+    :rtype: pd.DataFrame
+    """
     logging.info('Begin sum_ethnicity_from_file')
     # Create normalized ethnicity lookup DataFrame
     ethnicity_df = create_ethnicity_df()
@@ -80,6 +115,16 @@ def sum_ethnicity_from_file(file_path):
     return combined_df.mean()
 
 def sum_ethnicity_from_df(names_df, lastname_column='last'):
+    """
+    Normalizes input DataFrame, and outputs a DataFrame containing race
+    information.
+    :param names_df: DataFrame containing column lastname_column
+    :type names_df: pd.DataFrame
+    :param lastname_column: Column containing last names.
+    :type lastname_column: str
+    :return: DataFrame, containing ethnicity information
+    :rtype: pd.DataFrame
+    """
     logging.info('Begin sum_ethnicity_from_df')
     # Create normalized ethnicity lookup DataFrame
     ethnicity_df = create_ethnicity_df()
@@ -97,6 +142,11 @@ def sum_ethnicity_from_df(names_df, lastname_column='last'):
 
 
 def main():
+    """
+    Main method
+    :return: None
+    :rtype: None
+    """
     logging.info('Begin Main')
     parser = argparse.ArgumentParser(description='Script to empirially '
                                                'deterime ethnic makeup of a '
